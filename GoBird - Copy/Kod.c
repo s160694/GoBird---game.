@@ -13,6 +13,8 @@ int main()
     al_init_image_addon();
 
     ALLEGRO_KEYBOARD_STATE klawiatura;
+    al_get_keyboard_state(&klawiatura);
+
     ALLEGRO_DISPLAY * okno = al_create_display(szer, wys);
 
     al_clear_to_color(al_map_rgb(0, 255, 255));
@@ -23,8 +25,11 @@ int main()
     ALLEGRO_BITMAP * kol2 = al_load_bitmap("kol2.png");
     ALLEGRO_BITMAP * kol3 = al_load_bitmap("kol3.png");
     ALLEGRO_BITMAP * kol4 = al_load_bitmap("kol4.png");
+    ALLEGRO_BITMAP * menu = al_load_bitmap("menu.png");
+    ALLEGRO_BITMAP * howToPlay = al_load_bitmap("howToPlay.png");
 
 
+    ALLEGRO_FONT * font8 = al_create_builtin_font();
 
     int ptakx = 50;
     int ptaky = 50;
@@ -33,6 +38,9 @@ int main()
     double kolx2 = 700;
     double kolx3 = 500;
     double kolx4 = 300;
+
+    double przyspieszenie = 0;
+    double score = 0;
 
     double czas = al_get_time();
 
@@ -45,9 +53,44 @@ int main()
     ALLEGRO_BITMAP * render3;
     ALLEGRO_BITMAP * render4;
 
-    while(!al_key_down(&klawiatura, ALLEGRO_KEY_ESCAPE))
+    int userInterface = 0;
+
+    while (1)
     {
         al_get_keyboard_state(&klawiatura);
+        switch ( userInterface)
+        {
+        case 0:
+
+            al_draw_bitmap(menu, 0, 0, 0);
+            al_flip_display();
+
+            while ((!al_key_down(&klawiatura, ALLEGRO_KEY_1)) && (!al_key_down(&klawiatura, ALLEGRO_KEY_2)) && (!al_key_down(&klawiatura, ALLEGRO_KEY_3)))
+            {
+                al_get_keyboard_state(&klawiatura);
+            }
+
+            if (al_key_down(&klawiatura, ALLEGRO_KEY_1))
+            {
+                userInterface = 1;
+            }
+
+            if (al_key_down(&klawiatura, ALLEGRO_KEY_2))
+            {
+                userInterface = 2;
+            }
+
+            if (al_key_down(&klawiatura, ALLEGRO_KEY_3))
+            {
+                userInterface = 3;
+            }
+            break;
+        case 1:
+
+            while(!al_key_down(&klawiatura, ALLEGRO_KEY_ESCAPE))
+            {
+        al_get_keyboard_state(&klawiatura);
+
 
         if (al_get_time() > czas + 0.01)
         {
@@ -55,52 +98,47 @@ int main()
             if (al_key_down(&klawiatura, ALLEGRO_KEY_SPACE) && ptaky > 0) ptaky = ptaky - 8;
             if (1)
             {
-                kolx = kolx -1.5;
-                kolx2 = kolx2 -1.5;
-                kolx3 = kolx3 -1.5;
-                kolx4 = kolx4 -1.5;
+                kolx = kolx -1.5 - przyspieszenie;
+                kolx2 = kolx2 -1.5 - przyspieszenie;
+                kolx3 = kolx3 -1.5 - przyspieszenie;
+                kolx4 = kolx4 -1.5 - przyspieszenie;
+                przyspieszenie = przyspieszenie + 0.0005;
 
-            if (((kolx4 >= 50 && kolx4 <= 100) || (kolx4 >= -20 && kolx4 <= 30)) && ptaky  <= 143)
-            {
-                al_destroy_display(okno);
-            }
-            else if (((kolx4 >= 50 && kolx4 <= 100) || (kolx4 >= -20 && kolx4 <= 30)) && ptaky  >= 261)
-            {
-                al_destroy_display(okno);
-            }
+                if (((kolx4 >= 50 && kolx4 <= 100) || (kolx4 >= -20 && kolx4 <= 30)) && ptaky  <= 143)
+                {
+                    al_destroy_display(okno);
+                }
+                else if (((kolx4 >= 50 && kolx4 <= 100) || (kolx4 >= -20 && kolx4 <= 30)) && ptaky  >= 261)
+                {
+                    al_destroy_display(okno);
+                }
 
-            if (((kolx3 >= 50 && kolx3 <= 100) || (kolx3 >= -20 && kolx3 <= 30)) && ptaky  <= 84)
-            {
-                al_destroy_display(okno);
-            }
-            else if (((kolx3 >= 50 && kolx3 <= 100) || (kolx3 >= -20 && kolx3 <= 30)) && ptaky  >= 223)
-            {
-                al_destroy_display(okno);
-            }
+                if (((kolx3 >= 50 && kolx3 <= 100) || (kolx3 >= -20 && kolx3 <= 30)) && ptaky  <= 84)
+                {
+                    al_destroy_display(okno);
+                }
+                else if (((kolx3 >= 50 && kolx3 <= 100) || (kolx3 >= -20 && kolx3 <= 30)) && ptaky  >= 223)
+                {
+                    al_destroy_display(okno);
+                }
 
-            if (((kolx2 >= 50 && kolx2 <= 100) || (kolx2 >= -20 && kolx2 <= 30)) && ptaky  <= 173)
-            {
-                al_destroy_display(okno);
-            }
-            else if (((kolx2 >= 50 && kolx2 <= 100) || (kolx2 >= -20 && kolx2 <= 30)) && ptaky  >= 313)
-            {
-                al_destroy_display(okno);
-            }
+                if (((kolx2 >= 50 && kolx2 <= 100) || (kolx2 >= -20 && kolx2 <= 30)) && ptaky  <= 173)
+                {
+                    al_destroy_display(okno);
+                }
+                else if (((kolx2 >= 50 && kolx2 <= 100) || (kolx2 >= -20 && kolx2 <= 30)) && ptaky  >= 313)
+                {
+                    al_destroy_display(okno);
+                }
 
-            if (((kolx >= 50 && kolx <= 100) || (kolx >= -20 && kolx <= 30)) && ptaky  <= 115)
-            {
-                al_destroy_display(okno);
-            }
-            else if (((kolx >= 50 && kolx <= 100) || (kolx >= -20 && kolx <= 30)) && ptaky  >= 252)
-            {
-                al_destroy_display(okno);
-            }
-
-
-
-
-
-
+                if (((kolx >= 50 && kolx <= 100) || (kolx >= -20 && kolx <= 30)) && ptaky  <= 115)
+                {
+                    al_destroy_display(okno);
+                }
+                else if (((kolx >= 50 && kolx <= 100) || (kolx >= -20 && kolx <= 30)) && ptaky  >= 252)
+                {
+                    al_destroy_display(okno);
+                }
             }
 
             czas = al_get_time();
@@ -108,6 +146,7 @@ int main()
 
         al_clear_to_color(al_map_rgb_f(0.0, 1.0, 1.0));
         al_draw_bitmap(ptaszek, ptakx, ptaky, 0);
+
         ALLEGRO_BITMAP * container;
 
         if (kol1Change == false)
@@ -143,6 +182,9 @@ int main()
         {
             al_draw_bitmap(render4, kolx4, 0, 0);
         }
+
+        score = al_get_time() * 3 + 0.1 * al_get_time();
+        al_draw_textf(font8, al_map_rgb(0, 0, 0), 600, 10, 0, "Score = %0.0f", score);
 
         al_flip_display();
         al_rest(0.001);
@@ -192,7 +234,33 @@ int main()
             kol4Change = true;
         }
 
+
+
     }
+            break;
+
+        case 2:
+            al_draw_bitmap(howToPlay, 0, 0, 0);
+            al_flip_display();
+
+            while ((!al_key_down(&klawiatura, ALLEGRO_KEY_ESCAPE)))
+            {
+                al_get_keyboard_state(&klawiatura);
+            }
+
+            if (al_key_down(&klawiatura, ALLEGRO_KEY_ESCAPE))
+            {
+                userInterface = 0;
+            }
+            break;
+
+        case 3:
+            al_destroy_bitmap(menu);
+            al_destroy_display(okno);
+            return 0;
+        }
+
+   }
 
     al_destroy_bitmap(ptaszek);
     al_destroy_bitmap(kol3);
