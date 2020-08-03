@@ -1,1 +1,1 @@
-# s160694
+# GoBird - game.
